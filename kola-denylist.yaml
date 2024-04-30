@@ -7,16 +7,19 @@
   tracker: https://github.com/openshift/os/issues/1237
   osversion:
     - c9s
+    - c10s
 
 - pattern: iso-live-login.uefi-secure
   tracker: https://github.com/openshift/os/issues/1237
   osversion:
     - c9s
+    - c10s
 
 - pattern: iso-as-disk.uefi-secure
   tracker: https://github.com/openshift/os/issues/1237
   osversion:
     - c9s
+    - c10s
 
 # The 4.17 and 4.18 build of Ignition encounters a FIPS panic so
 # we are using the 4.16 build for now while that is under investigation.
@@ -40,5 +43,33 @@
 
 - pattern: ostree.sync
   tracker: https://github.com/openshift/os/issues/1751
+  osversion:
+    - c10s
+
+# Will fail until we have proper RHEL 10 builds of OCP packages
+- pattern: ext.config.version.rhel-major-version
+  tracker: TODO
+  osversion:
+    - c10s
+
+- pattern: multipath.day1
+  tracker: https://github.com/coreos/fedora-coreos-tracker/issues/1894
+  osversion:
+    - c10s
+
+- pattern: multipath.day2
+  tracker: https://github.com/coreos/fedora-coreos-tracker/issues/1894
+  osversion:
+    - c10s
+
+- pattern: ext.config.shared.root-reprovision.luks.multipath
+  tracker: https://github.com/coreos/fedora-coreos-tracker/issues/1894
+  osversion:
+    - c10s
+
+# To be removed once 3434 merged and contained in next fedora-coreos-config
+# submodule bump
+- pattern: ext.config.shared.networking.team-dhcp-via-ignition
+  tracker: https://github.com/coreos/fedora-coreos-config/pull/3434
   osversion:
     - c10s
