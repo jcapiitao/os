@@ -1,0 +1,39 @@
+[c10s-baseos]
+name=CentOS Stream 10 - BaseOS
+baseurl=https://composes.stream.centos.org/stream-10/production/latest-CentOS-Stream/compose/BaseOS/$basearch/os
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-centosofficial-SHA256
+gpgcheck=1
+repo_gpgcheck=0
+enabled=1
+
+[c10s-appstream]
+name=CentOS Stream 10 - AppStream
+baseurl=https://composes.stream.centos.org/stream-10/production/latest-CentOS-Stream/compose/AppStream/$basearch/os
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-centosofficial-SHA256
+gpgcheck=1
+repo_gpgcheck=0
+enabled=1
+
+[c10s-extras-common]
+name=CentOS Stream 10 - Extras packages
+baseurl=https://mirror.stream.centos.org/SIGs/10-stream/extras/$basearch/extras-common
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-SIG-Extras-SHA512
+gpgcheck=1
+repo_gpgcheck=0
+enabled=1
+
+[c10s-nfv]
+name=CentOS Stream 10 - NFV
+baseurl=https://composes.stream.centos.org/stream-10/production/latest-CentOS-Stream/compose/NFV/$basearch/os
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-centosofficial-SHA256
+gpgcheck=1
+repo_gpgcheck=0
+enabled=1
+
+[c10s-rt]
+name=CentOS Stream 10 - RT
+baseurl=https://composes.stream.centos.org/stream-10/production/latest-CentOS-Stream/compose/RT/$basearch/os
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-centosofficial-SHA256
+gpgcheck=1
+repo_gpgcheck=0
+enabled=1
