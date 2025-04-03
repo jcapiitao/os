@@ -20,5 +20,3 @@ RemainAfterExit=yes
 # We operate in the target root, before switching
 WorkingDirectory=/sysroot
 ExecStart=/bin/bash -c 'if ! findmnt boot &>/dev/null; then mount --bind sysroot/boot boot; echo enabled dracut fips workaround; fi'
-
-# No install section, this is only pulled in by rhcos-fips-finish.service

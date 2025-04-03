@@ -9,7 +9,6 @@ main() {
     mode=$1; shift
     case "$mode" in
         firstboot) firstboot;;
-        finish) finish;;
         *) fatal "Invalid mode $mode";;
     esac
 }
@@ -62,54 +61,6 @@ firstboot() {
     # Write to /run/coreos-kargs-reboot to inform the reboot service so we
     # can apply both kernel arguments & FIPS without multiple reboots
     > /run/coreos-kargs-reboot
-}
-
-finish() {
-    if [ "$(</proc/sys/crypto/fips_enabled)" -ne 1 ]; then
-        fatal "FIPS mode is not enabled."
-    fi
-
-    # If we're running from a live system, then set things up so that the dracut fips
-    # module will find the kernel binary.  TODO change dracut to look in /usr/lib/modules/$(uname -r)
-    # directly.
-    if test -f /etc/coreos-live-initramfs; then
-        # See the dracut source
-        rhevh_livedir=/run/initramfs/live
-        mkdir -p "${rhevh_livedir}"
-        # Why "vmlinuz0"?  I have no idea; it's what the dracut fips module uses.
-        ln -sr /usr/lib/modules/$(uname -r)/vmlinuz ${rhevh_livedir}/vmlinuz0
-    fi
-
-    # This is analogous to Anaconda's `chroot /sysroot fips-mode-setup`. Though
-    # of course, since our approach is "Ignition replaces Anaconda", we have to
-    # do it on firstboot ourselves. The key part here is that we do this
-    # *before* the initial switch root.
-    sysroot_bwrap fips-mode-setup --enable --no-bootcfg
-}
-
-sysroot_bwrap() {
-    # Need to work around the initrd `rootfs` / filesystem not being a valid
-    # mount to pivot out of. See:
-    # https://github.com/torvalds/linux/blob/26bc672134241a080a83b2ab9aa8abede8d30e1c/fs/namespace.c#L3605
-    # See similar code in: https://gist.github.com/jlebon/fb6e7c6dcc3ce17d3e2a86f5938ec033
-    mkdir -p /mnt/bwrap
-    mount --bind / /mnt/bwrap
-    mount --make-private /mnt/bwrap
-    mount --bind /mnt/bwrap /mnt/bwrap
-    for mnt in proc sys dev; do
-      mount --bind /$mnt /mnt/bwrap/$mnt
-    done
-    touch /mnt/bwrap/run/ostree-booted
-    mount --rbind /sysroot /mnt/bwrap/sysroot
-    chroot /mnt/bwrap env --chdir /sysroot bwrap \
-        --unshare-pid --unshare-uts --unshare-ipc --unshare-net \
-        --unshare-cgroup-try --dev /dev --proc /proc --chdir / \
-        --ro-bind usr /usr --bind etc /etc --dir /tmp --tmpfs /var/tmp \
-        --tmpfs /run --ro-bind /run/ostree-booted /run/ostree-booted \
-        --symlink usr/lib /lib \
-        --symlink usr/lib64 /lib64 \
-        --symlink usr/bin /bin \
-        --symlink usr/sbin /sbin -- "$@"
 }
 
 noop() {

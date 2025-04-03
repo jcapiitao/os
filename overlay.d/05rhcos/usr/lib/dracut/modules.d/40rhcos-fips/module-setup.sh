@@ -14,7 +14,6 @@ install() {
         tee \
         chroot \
         sync \
-        bwrap \
         env
 
     inst_script "$moddir/rhcos-fips.sh" \
@@ -23,8 +22,6 @@ install() {
         "/usr/sbin/coreos-dummy-ignition-files-run"
     inst_simple "$moddir/rhcos-fips.service" \
         "$systemdsystemunitdir/rhcos-fips.service"
-    inst_simple "$moddir/rhcos-fips-finish.service" \
-        "$systemdsystemunitdir/rhcos-fips-finish.service"
     inst_simple "$moddir/rhcos-fips-dracut-boot-fix.service" \
         "$systemdsystemunitdir/rhcos-fips-dracut-boot-fix.service"
 
@@ -37,5 +34,4 @@ install() {
     # see https://github.com/coreos/fedora-coreos-config/issues/799
     # We don't support reconfiguring the bootloader for FIPS in diskless cases
     systemctl -q --root="$initdir" add-requires ignition-diskful.target rhcos-fips.service || exit 1
-    systemctl -q --root="$initdir" add-requires initrd.target rhcos-fips-finish.service || exit 1
 }
